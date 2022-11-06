@@ -29,7 +29,7 @@ public class ValidationHelper {
      * Validates the json necessary to perform the PDF generation.
      * 
      * @param json Json to use to populate the xslt file.
-     * @throws MalformedJsonException If the json object is {@code null}.
+     * @throws MissingJsonException If the json object is {@code null}.
      */
     public static void validateJson(JSONObject json) {
         // TODO: implement this method
