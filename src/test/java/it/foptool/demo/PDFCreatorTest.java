@@ -14,6 +14,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import it.foptool.demo.helper.FOPHelper;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @SpringBootTest
+@ActiveProfiles("test")
 class PDFCreatorTest {
 
 	/**
@@ -75,7 +77,6 @@ class PDFCreatorTest {
 
 		saveFileToResources(pdfFile, pdfFilename);
 		log.info("Transformation completed, pdf file generated in resource directory");
-
 	}
 
 	private byte[] getFileFromResources(String filename) {
@@ -100,6 +101,7 @@ class PDFCreatorTest {
 		} catch (Exception e) {
 			log.error("Error while saving content on internal resources", e);
 		}
+
 	}
 
 }

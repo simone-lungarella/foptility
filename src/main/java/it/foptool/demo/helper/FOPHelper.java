@@ -22,6 +22,8 @@ import org.apache.fop.apps.FOPException;
 import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
+import org.json.JSONObject;
+import org.json.XML;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -79,6 +81,29 @@ public final class FOPHelper {
         final String str = result.toString();
         log.info("Marshalling per FOP: " + str);
         return new StreamSource(new StringReader(str));
+    }
+
+    /**
+     * Transforms into pdf the {@code xslt} file populating its parameter using
+     * values in the json: {@code rawJson}.
+     * 
+     * @param rawJson Json to use to populate the xslt file.
+     * @param xslt   Template fop to generate the pdf from.
+     * @return Byte array of pdf generated.
+     */
+    public static byte[] transformJson2PDF(final String rawJson, final byte[] xslt) {
+        try {
+            return transformSRC2PDF(getXMLSourceFromJson(rawJson), xslt);
+        } catch (FOPException | IOException | TransformerException e) {
+            log.info("Error while generating pdf");
+        }
+        return new byte[0];
+    }
+
+    private static Source getXMLSourceFromJson(final String rawJson) {
+        JSONObject json = new JSONObject(rawJson);
+        String xml = XML.toString(json);
+        return new StreamSource(new StringReader(xml.toString()));
     }
 
     private static byte[] transformSRC2PDF(final Source srcXML, final byte[] xslt)
