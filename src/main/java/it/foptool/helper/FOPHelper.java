@@ -1,4 +1,4 @@
-package it.foptool.demo.helper;
+package it.foptool.helper;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -101,13 +101,12 @@ public final class FOPHelper {
     }
 
     private static Source getXMLSourceFromJson(final String rawJson) {
-        JSONObject json = new JSONObject(rawJson);
-        String xml = XML.toString(json);
+        final JSONObject json = new JSONObject(rawJson);
+        final String xml = XML.toString(json);
         return new StreamSource(new StringReader(xml.toString()));
     }
 
-    private static byte[] transformSRC2PDF(final Source srcXML, final byte[] xslt)
-            throws FOPException, IOException, TransformerException {
+    private static byte[] transformSRC2PDF(final Source srcXML, final byte[] xslt) throws FOPException, IOException, TransformerException {
         final InputStream streamXSLT = new ByteArrayInputStream(xslt);
         final Source srcXSLT = new StreamSource(streamXSLT);
         final ByteArrayOutputStream out = new ByteArrayOutputStream();

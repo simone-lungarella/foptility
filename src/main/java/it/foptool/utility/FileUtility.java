@@ -1,4 +1,4 @@
-package it.foptool.demo.utility;
+package it.foptool.utility;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;

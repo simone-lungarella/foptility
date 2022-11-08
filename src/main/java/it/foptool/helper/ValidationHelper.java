@@ -1,11 +1,11 @@
-package it.foptool.demo.helper;
+package it.foptool.helper;
 
 import java.lang.reflect.MalformedParametersException;
 
 import org.json.JSONObject;
 import org.springframework.web.multipart.MultipartFile;
 
-import it.foptool.demo.dto.XsltParamsDTO;
+import it.foptool.dto.XsltParamsDTO;
 
 /**
  * Helper class to validate the parameters and the template.

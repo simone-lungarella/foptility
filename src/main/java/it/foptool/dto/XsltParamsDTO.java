@@ -1,4 +1,4 @@
-package it.foptool.demo.dto;
+package it.foptool.dto;
 
 import java.util.Map;
 

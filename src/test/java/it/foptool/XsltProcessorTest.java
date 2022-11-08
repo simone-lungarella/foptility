@@ -1,4 +1,4 @@
-package it.foptool.demo;
+package it.foptool;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,8 +22,8 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
-import it.foptool.demo.dto.XsltParamsDTO;
-import it.foptool.demo.utility.FileUtility;
+import it.foptool.dto.XsltParamsDTO;
+import it.foptool.utility.FileUtility;
 import lombok.extern.slf4j.Slf4j;
 
 /**

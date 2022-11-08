@@ -1,4 +1,4 @@
-package it.foptool.demo;
+package it.foptool;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
@@ -14,9 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 
-import it.foptool.demo.dto.XsltParamsDTO;
-import it.foptool.demo.helper.ValidationHelper;
-import it.foptool.demo.utility.FileUtility;
+import it.foptool.dto.XsltParamsDTO;
+import it.foptool.helper.ValidationHelper;
+import it.foptool.utility.FileUtility;
 
 /**
  * Utilty test class.
@@ -35,9 +36,10 @@ class UtilityTest {
         map.put("filename", FILENAME);
 
         assertTrue(FileUtility.getFilename(map).contains(FILENAME), "If the map contains a filename, it should be returned");
-        
-        map = new HashMap<>();
-        assertFalse(FileUtility.getFilename(map).contains(FILENAME), "If the map does not contains the filename, a default name should be returned");
+
+        final String extractedFilename = FileUtility.getFilename(new HashMap<>());
+        assertFalse(extractedFilename.contains(FILENAME), "If the map does not contains the filename, a default name should be returned");
+        assertFalse(StringUtils.isEmpty(extractedFilename), "If the map does not contains the filename, a default name should be returned");
     }
 
     @Test

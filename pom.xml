@@ -8,10 +8,10 @@
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>it.foptool</groupId>
-	<artifactId>demo</artifactId>
+	<artifactId>pdf-helper</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo</name>
-	<description>Demo project for Spring Boot</description>
+	<name>pdf-helper</name>
+	<description>PDF Helper base on FOP</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20160212</version>
+			<version>20220924</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.xmlgraphics/fop -->

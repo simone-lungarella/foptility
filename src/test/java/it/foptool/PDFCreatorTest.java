@@ -1,4 +1,4 @@
-package it.foptool.demo;
+package it.foptool;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-import it.foptool.demo.helper.FOPHelper;
+import it.foptool.helper.FOPHelper;
 import lombok.extern.slf4j.Slf4j;
 
 /**
