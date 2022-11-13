@@ -4,6 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,7 @@ import it.foptool.dto.XsltParamsDTO;
  * 
  * @author Simone Lungarella
  */
+@CrossOrigin(origins = "*")
 @RequestMapping(path = "/foptility")
 @Tag(name = "PDF Processor", description = "PDF transformer and merger")
 public interface IProcessorCTL {
@@ -42,4 +44,11 @@ public interface IProcessorCTL {
                         @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE)) })
         ResponseEntity<byte[]> generatePdfFromJson(@RequestPart(name = "json", required = true) String json, @RequestPart(value = "file", required = true) MultipartFile file, HttpServletRequest request);
 
+        @PostMapping(value = "/transform/json/generic-table", consumes = { MediaType.APPLICATION_JSON_VALUE })
+        @Operation(summary = "Transform a xslt into a PDF using params from Json object", description = "Execute the transformation of a xslt file into a PDF file")
+        @ApiResponses(value = {
+                        @ApiResponse(responseCode = "201", description = "Created", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE)),
+                        @ApiResponse(responseCode = "400", description = "Bad Request", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE)),
+                        @ApiResponse(responseCode = "500", description = "Internal Server Error", content = @Content(mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE)) })
+        ResponseEntity<byte[]> generatePdf(@RequestBody(required = true) String json, HttpServletRequest request);
 }

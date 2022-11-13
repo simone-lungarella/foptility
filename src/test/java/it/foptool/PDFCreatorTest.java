@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
@@ -12,6 +11,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -75,33 +75,48 @@ class PDFCreatorTest {
 		byte[] pdfFile = FOPHelper.transformMAP2PDF(params, xsltFile);
 		assertNotNull(pdfFile, "PDF file not generated correctly");
 
-		saveFileToResources(pdfFile, pdfFilename);
+		File file = new File("src/main/resources/" + pdfFilename);
+		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
+			bos.write(pdfFile);
+		} catch (Exception e) {
+			log.error("Error while saving file", e);
+		}
+		
+		log.info("Transformation completed, pdf file generated in resource directory");
+	}
+
+	@Test
+	void phaseOneTest() throws JSONException {
+		final String xsltFilename = "xslt/phase1.xslt";
+		final String pdfFilename = "pdfPhase1.pdf";
+
+		byte[] xsltFile = getFileFromResources(xsltFilename);
+		assertNotNull(xsltFile, "Xslt file not retrieved correctly");
+
+		final String json = "{\"parameters\": {\"footer\": {\"subtitle\": \"Sottotitolo\", \"title\": \"Titolo\"}, \"items\": [{\"item\": {\"isCompliant\": true, \"kg\": \"Test\", \"lot\": \"Test\", \"origin\": \"Autoproduzione\", \"plants\": \"Test\"}}, {\"item\": {\"isCompliant\": true, \"kg\": \"TEst\", \"lot\": \"Test\", \"origin\": \"Autoproduzione\", \"plants\": \"Test\"}}]}}";
+		
+		byte[] pdfFile = FOPHelper.transformJson2PDF(json, xsltFile);
+		assertNotNull(pdfFile, "PDF file not generated correctly");
+
+		File file = new File("src/main/resources/" + pdfFilename);
+		try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file))) {
+			bos.write(pdfFile);
+		} catch (Exception e) {
+			log.error("Error while saving file", e);
+		}
+		
 		log.info("Transformation completed, pdf file generated in resource directory");
 	}
 
 	private byte[] getFileFromResources(String filename) {
-		String filepath = this.getClass().getResource("/").getPath().replace("target/test-classes/",
-				"src/test/java/it/foptool/demo/resources/");
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 
-		try (InputStream is = new FileInputStream(new File(filepath + filename));) {
+		try (InputStream is = classLoader.getResourceAsStream(filename);) {
 			return is.readAllBytes();
 		} catch (Exception e) {
 			log.error("Error while reading file from internal resources", e);
 		}
 		return null;
-	}
-
-	private void saveFileToResources(byte[] content, String filename) {
-
-		String filepath = this.getClass().getResource("/").getPath().replace("target/test-classes/",
-				"src/test/java/it/foptool/demo/resources/");
-
-		try (BufferedOutputStream bs = new BufferedOutputStream(new FileOutputStream(new File(filepath + filename)))) {
-			bs.write(content);
-		} catch (Exception e) {
-			log.error("Error while saving content on internal resources", e);
-		}
-
 	}
 
 }
