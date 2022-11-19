@@ -23,7 +23,6 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import lombok.extern.slf4j.Slf4j;

@@ -1,26 +1,5 @@
-POST http://localhost:8080/foptility/transform
-Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
 
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="requestBody"
-Content-Type: application/json
-
-{
-    "params": {
-        "param1": "value1",
-        "param2": "value2"
-    }
-}
-
-------WebKitFormBoundary7MA4YWxkTrZu0gW
-Content-Disposition: form-data; name="xslt"; filename="text.xslt"
-Content-Type: application/xml
-
-< ../xslt/test.xslt
-------WebKitFormBoundary7MA4YWxkTrZu0gW--
-###
-
-POST http://localhost:8080/foptility/transform/json/phase-1
+POST http://localhost:8080/foptility/transform/json
 Content-Type: application/json
 
 {
