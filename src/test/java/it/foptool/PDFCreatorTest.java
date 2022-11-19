@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
  * 
  * @author Simone Lungarella
  */
+@Disabled
 @Slf4j
 @SpringBootTest
 @ActiveProfiles("test")
