@@ -1,10 +1,12 @@
 <h1 align="center"> Foptility </h1>
-<h3 align="center"> Simple BFF that generates pdf files starting from a set of xslt templates and a collection of parameters specifically formatted. </h3>
+<h3 align="center"> Spring boot application that generates pdf files starting from a set of xslt templates and a collection of parameters specifically formatted. </h3>
 
 <p align="center" >
   <img src="https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white" />
   <img src="https://img.shields.io/badge/apache_maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white" />
   <img src="https://img.shields.io/badge/Apache%20FOP-FF3399?style=for-the-badge&logo=Apache&logoColor=white" />
+  <img src="https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white" />
+  
 </p>
 
 ---
