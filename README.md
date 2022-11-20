@@ -7,6 +7,8 @@
   <img src="https://img.shields.io/badge/Apache%20FOP-FF3399?style=for-the-badge&logo=Apache&logoColor=white" />
 </p>
 
+---
+
 Rest API that exposes method to perform PDF generation given its content. This application only generates PDF associated with product tracking workflow relative to Italian land production of small enterprises. 
 
 Currently are handled only 6 types of documents that are the following:
