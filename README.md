@@ -34,7 +34,7 @@ The provided JSON must be wrapped in <i>parameters</i> object and must contain:
   <li>A field <i>productInfo</i> that contains generic properties. Only necessary for specific templates.</li>
 </ol>
 
-Following is a snipped example that can be executed with a <strong>REST Client<strong>.
+Following is a snipped example that can be executed with a <strong>REST Client</strong>.
 
 ```
 POST https://foptility.herokuapp.com/foptility/transform/json
@@ -57,4 +57,9 @@ Content-Type: application/json
     }
 }
 ```
-<i> Uses Java11+ and Maven 3.6+.</i> 
+--- 
+The application is free to use but if you don't want to build your own client you can make use of a web page deployed and ready to use at the following address: <a>https://simone-lungarella.github.io/product-tracker/</a>, this application facilitate the process and consent also to validate data before the communication with the Rest API here descripted.
+
+The application uses <i> Java11+ and Maven 3.6+ </i> and is deploy to Heroku: <a>https://foptility.herokuapp.com/openapi/ui</a> and the static page itself is deployed on another server. Both application are free to use and the code is open source, if you want help with the maintaining of the servers you can donate with:
+
+[![Paypal](https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white)](https://www.paypal.com/donate/?hosted_button_id=B4AGF9F8W7DHJ)
