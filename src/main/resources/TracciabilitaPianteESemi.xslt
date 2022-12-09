@@ -101,7 +101,7 @@
 									</fo:table-cell>
 									<fo:table-cell border="solid 1px black" column-number="5">
 										<fo:block xsl:use-attribute-sets="header">
-											KG O COLLI ACQUISTATI
+											KG O COLLI
 										</fo:block>
 									</fo:table-cell>
 								</fo:table-row>
