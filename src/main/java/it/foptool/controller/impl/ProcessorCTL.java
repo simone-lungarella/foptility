@@ -38,7 +38,7 @@ public class ProcessorCTL implements IProcessorCTL {
         httpHeaders.setContentType(MediaType.APPLICATION_PDF);
         httpHeaders.set( HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename + " - " + LocalDate.now() + ".pdf" );
 
-        final byte[] pdfFile = generatePdf(json, file);
+        final byte[] pdfFile = generatePdf(json, file, filename);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -47,9 +47,13 @@ public class ProcessorCTL implements IProcessorCTL {
                 .body(pdfFile);
     }
 
-    private byte[] generatePdf(String json, byte[] file) {
+    private byte[] generatePdf(String json, byte[] file, String filename) {
         try {
-            return FOPHelper.transformJson2PDF(json, file);
+            if (!filename.equals("ControlloPulizie")) {
+                return FOPHelper.transformJson2PDF(json, file);
+            } else {
+                return FOPHelper.transformJson2PDFPhase5(json, file);
+            }
         } catch (Exception e) {
             throw new PDFGenerationException("Error during PDF generation", e);
         }

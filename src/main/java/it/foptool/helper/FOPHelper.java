@@ -6,8 +6,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -25,6 +29,7 @@ import org.apache.fop.apps.MimeConstants;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import it.foptool.enums.ToolsEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -100,11 +105,37 @@ public final class FOPHelper {
         return new byte[0];
     }
 
+    public static byte[] transformJson2PDFPhase5(final String rawJson, final byte[] xslt) {
+        try {
+            return transformSRC2PDF(getXMLSourceFromJsonPhase5(rawJson), xslt);
+        } catch (FOPException | IOException | TransformerException e) {
+            log.info("Error while generating pdf");
+        }
+        return new byte[0];
+    }
+
+    private static Source getXMLSourceFromJsonPhase5(final String rawJson) {
+        final JSONObject json = new JSONObject(rawJson);
+
+        final StringBuilder result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r");
+
+        final JSONObject root = json.getJSONObject("parameters");
+        result.append("<parameters>");
+
+        addPhase5Info(root, result);
+        addItemsPhase5(root, result);
+
+        addFooter(root, result);
+
+        result.append("</parameters>");
+        return new StreamSource(new StringReader(result.toString()));
+    }
+
     private static Source getXMLSourceFromJson(final String rawJson) {
         final JSONObject json = new JSONObject(rawJson);
-        
+
         final StringBuilder result = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r");
-        
+
         final JSONObject root = json.getJSONObject("parameters");
         result.append("<parameters>");
 
@@ -115,6 +146,76 @@ public final class FOPHelper {
 
         result.append("</parameters>");
         return new StreamSource(new StringReader(result.toString()));
+    }
+
+    private static void addPhase5Info(JSONObject root, StringBuilder result) {
+        result.append("<year>");
+        result.append(root.getString("year"));
+        result.append("</year>");
+
+        result.append("<month>");
+        result.append(root.getString("month"));
+        result.append("</month>");
+    }
+
+    private static void addItemsPhase5(final JSONObject root, final StringBuilder result) {
+
+        final JSONArray items = root.getJSONArray("items");
+
+        for(ToolsEnum tool : ToolsEnum.values()) {
+            result.append("<item>");
+
+            result.append("<description>");
+            result.append(tool.getDescription());
+            result.append("</description>");
+            result.append("<infos>");
+            for(int j = 1; j <= 31; j++) {
+                result.append("<info>");
+                result.append("<day>");
+                result.append(j);
+                result.append("</day>");
+                result.append("<isPresent>");
+
+                result.append(checkIfToolIsPresent(items, tool, j));
+                
+                result.append("</isPresent>");
+                result.append("</info>");
+            }
+            result.append("</infos>");
+            result.append("</item>");
+        }
+    }
+
+    private static boolean checkIfToolIsPresent(JSONArray items, ToolsEnum tool, int dayNumber) {
+
+        boolean isPresent = false;
+        for (int i = 0; i < items.length(); i++) {
+            final JSONObject item = (JSONObject) items.getJSONObject(i).get("item");
+
+            if(item.get("day").equals(dayNumber)) {
+
+                JSONArray tools = null;
+                try {
+                    tools = item.getJSONArray("description");
+                } catch (Exception e) {
+                    isPresent = false;
+                    break;
+                }
+                
+                for (int j = 0; j < tools.length(); j++) {
+                    if(tools.get(j).equals(tool.getDescription())) {
+                        isPresent = true;
+                        break;
+                    }
+                }
+
+                if(isPresent) {
+                    break;
+                }
+            }
+        }
+
+        return isPresent;
     }
 
     private static void addItems(final JSONObject root, final StringBuilder result) {
@@ -143,6 +244,27 @@ public final class FOPHelper {
                         value = String.valueOf(objValue);
                     } else if (objValue instanceof Boolean) {
                         value = ((Boolean) objValue) ? "Si" : "No";
+                    } else if (objValue instanceof JSONArray) {
+                        final JSONArray array = (JSONArray) objValue;
+                        StringBuilder innerContent = new StringBuilder();
+
+                        List<String> usedTools = IntStream
+                                    .range(0, array.length())
+                                    .mapToObj(array::getString)
+                                    .collect(Collectors.toList());
+                        
+                        Arrays.asList(ToolsEnum.values()).forEach(
+                            tool -> {
+                                innerContent.append("<" + tool.name() + ">");
+                                if (usedTools.contains(tool.getDescription())) {
+                                    innerContent.append("Si");
+                                } else {
+                                    innerContent.append("No");
+                                }
+                                innerContent.append("</" + tool.name() + ">");
+                            }
+                        );
+                        value = innerContent.toString();
                     }
 
                     result.append("<" + key + ">");
@@ -156,7 +278,6 @@ public final class FOPHelper {
         } catch (Exception e) {
             log.warn("No items found, will be skipped");
         }
-
     }
 
     private static void addFooter(final JSONObject root, final StringBuilder result) {
@@ -217,7 +338,12 @@ public final class FOPHelper {
         final Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, out);
         final Result res = new SAXResult(fop.getDefaultHandler());
         final Transformer transformer = tFactory.newTransformer(srcXSLT);
-        transformer.transform(srcXML, res);
+        try {
+            transformer.transform(srcXML, res);
+        } catch (Exception e) {
+            log.error("Error while transforming xml to pdf", e);
+            throw e;
+        }
         out.flush();
         out.close();
         return out.toByteArray();
