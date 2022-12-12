@@ -26,6 +26,13 @@
 		<xsl:attribute name="text-align">center</xsl:attribute>
 	</xsl:attribute-set>
 
+	<xsl:attribute-set name="normal-text">
+		<xsl:attribute name="font-family">'Times New Roman', Times, serif</xsl:attribute>
+		<xsl:attribute name="font-size">8pt</xsl:attribute>
+		<xsl:attribute name="line-height">18pt</xsl:attribute>
+		<xsl:attribute name="text-align">left</xsl:attribute>
+	</xsl:attribute-set>
+
 	<xsl:attribute-set name="important-text">
 		<xsl:attribute name="font-family">'Times New Roman', Times, serif</xsl:attribute>
 		<xsl:attribute name="font-size">8pt</xsl:attribute>
@@ -34,7 +41,7 @@
 		<xsl:attribute name="font-weight">bold</xsl:attribute>
 	</xsl:attribute-set>
 
-	<xsl:attribute-set name="bold_text" use-attribute-sets="text">
+	<xsl:attribute-set name="bold-text" use-attribute-sets="text">
 		<xsl:attribute name="font-weight">bold</xsl:attribute>
 	</xsl:attribute-set>
 
@@ -50,8 +57,8 @@
 		<fo:root>
 			<fo:layout-master-set>
 				<fo:simple-page-master master-name="A4-portrait" page-height="29.7cm" page-width="21.0cm" margin="2cm">
-					<fo:region-body region-name="xsl-region-body" margin-bottom=".5in" margin-top=".50in"/>
-            		<fo:region-after region-name="xsl-region-after" extent=".5in"/>
+					<fo:region-body region-name="xsl-region-body" margin-bottom=".5in" margin-top=".50in" />
+					<fo:region-after region-name="xsl-region-after" extent=".5in" />
 				</fo:simple-page-master>
 			</fo:layout-master-set>
 			<fo:page-sequence master-reference="A4-portrait">
@@ -136,6 +143,22 @@
 								</xsl:for-each>
 							</fo:table-body>
 						</fo:table>
+
+						<xsl:call-template name="VoidLine14pt" />
+
+						<fo:block xsl:use-attribute-sets="bold-text">
+							N.B Il lotto della materia prima sarà costituito dalla lettera assegnata all'appezzamento più la data di raccolta.
+						</fo:block>
+
+						<xsl:call-template name="VoidLine14pt" />
+
+						<xsl:for-each select="./lotDefinitions/lotDefinition">
+							<fo:block xsl:use-attribute-sets="normal-text">
+								<xsl:value-of select="./name" />
+								<xsl:text>: </xsl:text>
+								<xsl:value-of select="./value" />
+							</fo:block>
+						</xsl:for-each>
 					</fo:block>
 				</fo:flow>
 			</fo:page-sequence>

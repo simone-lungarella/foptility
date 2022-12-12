@@ -140,12 +140,38 @@ public final class FOPHelper {
         result.append("<parameters>");
 
         addProductInfo(root, result);
+        addLotsDefinition(root, result);
         addItems(root, result);
 
         addFooter(root, result);
 
         result.append("</parameters>");
         return new StreamSource(new StringReader(result.toString()));
+    }
+
+    private static void addLotsDefinition(JSONObject root, StringBuilder result) {
+
+        try {
+            final JSONArray lotsDefinition = root.getJSONArray("lotDefinitions");
+            
+            result.append("<lotDefinitions>");
+
+            for (int i = 0; i < lotsDefinition.length(); i++) {
+                final JSONObject lot = lotsDefinition.getJSONObject(i);
+                result.append("<lotDefinition>");
+                result.append("<name>");
+                result.append(lot.getString("name"));
+                result.append("</name>");
+                result.append("<value>");
+                result.append(lot.getString("value"));
+                result.append("</value>");
+                result.append("</lotDefinition>");
+            }
+
+            result.append("</lotDefinitions>");
+        } catch (Exception e) {
+            log.warn("No lots definition found");
+        }
     }
 
     private static void addPhase5Info(JSONObject root, StringBuilder result) {
